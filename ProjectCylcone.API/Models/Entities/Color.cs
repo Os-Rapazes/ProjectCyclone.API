@@ -13,6 +13,6 @@ namespace ProjectCylcone.API.Models.Entities
         [Column("name")]
         [StringLength(50)]
         public string Name { get; set; }
-        
+                
     }
 }

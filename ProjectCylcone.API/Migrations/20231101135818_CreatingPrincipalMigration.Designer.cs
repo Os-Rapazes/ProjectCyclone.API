@@ -11,8 +11,8 @@ using ProjectCylcone.API.Context;
 namespace ProjectCylcone.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230906234017_CreatingPincipalShcemas")]
-    partial class CreatingPincipalShcemas
+    [Migration("20231101135818_CreatingPrincipalMigration")]
+    partial class CreatingPrincipalMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,19 +30,26 @@ namespace ProjectCylcone.API.Migrations
                         .HasColumnName("car_id");
 
                     b.Property<string>("Brand")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("brand");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("client_id");
 
                     b.Property<int>("ColorId")
                         .HasColumnType("int")
                         .HasColumnName("color_id");
 
                     b.Property<string>("Model")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("model");
 
                     b.Property<string>("Plate")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("plate");
 
                     b.Property<double>("Price")
@@ -51,9 +58,45 @@ namespace ProjectCylcone.API.Migrations
 
                     b.HasKey("CarId");
 
+                    b.HasIndex("ClientId");
+
                     b.HasIndex("ColorId");
 
                     b.ToTable("cars");
+                });
+
+            modelBuilder.Entity("ProjectCylcone.API.Models.Entities.Client", b =>
+                {
+                    b.Property<Guid>("ClientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Rg")
+                        .IsRequired()
+                        .HasMaxLength(9)
+                        .HasColumnType("varchar(9)");
+
+                    b.Property<bool>("State")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("ClientId");
+
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("ProjectCylcone.API.Models.Entities.Color", b =>
@@ -64,7 +107,8 @@ namespace ProjectCylcone.API.Migrations
                         .HasColumnName("color_id");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("name");
 
                     b.HasKey("ColorId");
@@ -74,11 +118,19 @@ namespace ProjectCylcone.API.Migrations
 
             modelBuilder.Entity("ProjectCylcone.API.Models.Entities.Car", b =>
                 {
+                    b.HasOne("ProjectCylcone.API.Models.Entities.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjectCylcone.API.Models.Entities.Color", "Color")
                         .WithMany()
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
 
                     b.Navigation("Color");
                 });

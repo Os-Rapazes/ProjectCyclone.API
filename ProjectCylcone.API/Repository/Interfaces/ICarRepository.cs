@@ -1,15 +1,15 @@
-﻿using ProjectCylcone.API.Models.Entities;
+﻿using ProjectCylcone.API.Dtos;
+using ProjectCylcone.API.Models.Entities;
 
 namespace ProjectCylcone.API.Repository.Interfaces
 {
     public interface ICarRepository
     {
-        Task<List<Car>> FindAllAsync();
-        Task<Car> FindById(Guid id);
-        Task Insert(Car car);
-        void Update(Car car);
+        Task<List<CarDTO>> FindAllAsync();
+        Task<CarDTO> FindById(Guid id);
+        Task<CarDTO> Insert(CarRegisterDTO car);
+        Task Update(CarDTO car);
         Task<bool> Delete(Guid id);
-        Task Commit();
 
     }
 }

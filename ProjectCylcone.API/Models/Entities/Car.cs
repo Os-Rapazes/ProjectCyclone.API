@@ -32,7 +32,10 @@ namespace ProjectCylcone.API.Models.Entities
         
         [Column("price")]
         public double Price { get; set; }
+        [Required]
 
-
+        [Column("client_id")]
+        public Guid ClientId { get; set; }
+        public Client Client { get; set; }
     }
 }
