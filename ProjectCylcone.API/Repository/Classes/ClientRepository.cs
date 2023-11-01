@@ -52,18 +52,35 @@ namespace ProjectCylcone.API.Repository.Classes
             
             await _context.SaveChangesAsync();
         }
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> DeactiveClient(Guid id)
         {
             Client client = await _context.Clients.FirstOrDefaultAsync(x => x.ClientId.Equals(id));
             
             if (client == null) return false;
-            
-            _context.Remove(client);
+
+            client.State = false;
+
+            //Remove os carros que estão associados ao cliente desativado
+            _context.Cars.RemoveRange(_context.Cars.Where(car => car.ClientId.Equals(id)));
            
             await _context.SaveChangesAsync();
             
             return true;
 
+        }
+
+        public async Task<bool> ActiveClient(Guid id)
+        {
+
+            Client client = await _context.Clients.FirstOrDefaultAsync(x => x.ClientId.Equals(id));
+
+            if (client == null) return false;
+
+            client.State = true;
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

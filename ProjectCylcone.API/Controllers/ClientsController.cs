@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using ProjectCylcone.API.Dtos;
 using ProjectCylcone.API.Repository.Interfaces;
@@ -43,10 +42,28 @@ namespace ProjectCylcone.API.Controllers
             ClientDTO verify = await clientRepository.FindById(dto.ClientId);
 
             if (verify.Equals(null)) return NotFound($"Client not found with id : {dto.ClientId}");
-            
+
             await clientRepository.Update(dto);
-            
+
             return Ok(dto);
+        }
+
+        [HttpPatch("DeactiveClient/{id}")]
+        public async Task<ActionResult> DeactiveClient(Guid id) {
+
+           bool confirm =  await clientRepository.DeactiveClient(id);
+
+            if (!confirm) return BadRequest("Client not found");
+
+           return NoContent();
+        }
+
+        [HttpPatch("ActiveClient/{id}")]
+        public async Task<ActionResult> ActiveClient(Guid id) {
+
+            await clientRepository.ActiveClient(id);
+
+            return NoContent();
         }
     }
 }

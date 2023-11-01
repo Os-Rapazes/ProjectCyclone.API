@@ -9,6 +9,8 @@ namespace ProjectCylcone.API.Repository.Interfaces
         Task<ClientDTO> FindById(Guid id);
         Task Insert(ClientRegisterDTO dto);
         Task Update(ClientDTO dto);
-        Task<bool> Delete(Guid id);
+        Task<bool> DeactiveClient(Guid id);
+        Task<bool> ActiveClient(Guid id);
+
     }
 }

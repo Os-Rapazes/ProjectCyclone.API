@@ -12,7 +12,8 @@ namespace ProjectCylcone.API.Dtos
         [Required]
         string Cpf,
         [Required]
-        string Rg
+        string Rg,
+        bool State
         )
     {
 
